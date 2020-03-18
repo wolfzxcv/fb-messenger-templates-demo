@@ -27,12 +27,159 @@ function receiveMessage(req, res) {
   const userId = event.sender.id;
   const userText = event.message.text;
   let replyWords;
-  if (event.message && event.message.text) {
+  let replyData;
+  if (
+    event.message &&
+    event.message.text &&
+    event.message.text.includes('按鈕')
+  ) {
+    replyWords = 'Site links here';
+    (replyData = {
+      attachment: {
+        type: 'template',
+        payload: {
+          template_type: 'button',
+          text: replyWords,
+          buttons: [
+            {
+              type: 'web_url',
+              url: 'https://www.google.com.tw/',
+              title: 'Google',
+            },
+            {
+              type: 'web_url',
+              url: 'https://www.youtube.com/',
+              title: 'Youtube',
+            },
+            {
+              type: 'web_url',
+              url: 'https://www.yahoo.com/',
+              title: 'Yahoo',
+            },
+          ],
+        },
+      },
+    }),
+      sendMessage(userId, replyData);
+  } else if (
+    event.message &&
+    event.message.text &&
+    event.message.text.includes('快選')
+  ) {
+    replyData = {
+      text: 'Yes or No',
+      quick_replies: [
+        {
+          content_type: 'text',
+          title: 'Yes',
+          payload: '<POSTBACK_PAYLOAD>',
+          image_url:
+            'https://image.shutterstock.com/image-vector/smiley-vector-happy-face-260nw-408014413.jpg',
+        },
+        {
+          content_type: 'text',
+          title: 'No',
+          payload: '<POSTBACK_PAYLOAD>',
+          image_url:
+            'https://i.pinimg.com/736x/b4/42/b3/b442b3c2ac6ac0beffc9e554474a208c.jpg',
+        },
+      ],
+    };
+    sendMessage(userId, replyData);
+  } else if (
+    event.message &&
+    event.message.text &&
+    event.message.text.includes('牌卡')
+  ) {
+    (replyData = {
+      attachment: {
+        type: 'template',
+        payload: {
+          template_type: 'generic',
+          elements: [
+            {
+              title: 'Taiwan',
+              image_url:
+                'http://thinkpower.com.tw/demo/thsrcAI/images/card-station.png',
+              buttons: [
+                {
+                  type: 'postback',
+                  payload: 'Taipei',
+                  title: 'Taipei',
+                },
+                {
+                  type: 'postback',
+                  title: 'Taichung',
+                  payload: 'Taichung',
+                },
+                {
+                  type: 'postback',
+                  title: 'Kaohsiung',
+                  payload: 'Kaohsiung',
+                },
+              ],
+            },
+            {
+              title: 'Norway',
+              image_url:
+                'http://thinkpower.com.tw/demo/thsrcAI/images/card-station.png',
+              buttons: [
+                {
+                  type: 'postback',
+                  payload: 'Oslo',
+                  title: 'Oslo',
+                },
+                {
+                  type: 'postback',
+                  title: 'Bergen',
+                  payload: 'Bergen',
+                },
+                {
+                  type: 'postback',
+                  title: 'Tromsø',
+                  payload: 'Tromsø',
+                },
+              ],
+            },
+            {
+              title: 'Finland',
+              image_url:
+                'http://thinkpower.com.tw/demo/thsrcAI/images/card-station.png',
+              buttons: [
+                {
+                  type: 'postback',
+                  payload: 'Helsinki',
+                  title: 'Helsinki',
+                },
+                {
+                  type: 'postback',
+                  title: 'Espoo',
+                  payload: 'Espoo',
+                },
+                {
+                  type: 'postback',
+                  title: 'Tampere',
+                  payload: 'Tampere',
+                },
+              ],
+            },
+          ],
+        },
+      },
+    }),
+      sendMessage(userId, replyData);
+  } else if (event.message && event.message.text) {
     replyWords = `You said ${userText}`;
-    sendMessage(userId, replyWords);
+    replyData = {
+      text: replyWords,
+    };
+    sendMessage(userId, replyData);
   } else if (event.message && !event.message.text) {
     replyWords = `Text only, please.`;
-    sendMessage(userId, replyWords);
+    replyData = {
+      text: replyWords,
+    };
+    sendMessage(userId, replyData);
   } else {
     res
       .status(400)
@@ -41,19 +188,17 @@ function receiveMessage(req, res) {
   res.sendStatus(200);
 }
 
-function sendMessage(receiver, replyWords) {
-  const replyData = {
+function sendMessage(receiver, replyData) {
+  const allData = {
     messaging_type: 'RESPONSE',
     recipient: {
       id: receiver,
     },
-    message: {
-      text: replyWords,
-    },
+    message: replyData,
   };
 
   axios
-    .post(`${env.MESSAGE_API}?access_token=${env.ACCESS_TOKEN}`, replyData)
+    .post(`${env.MESSAGE_API}?access_token=${env.ACCESS_TOKEN}`, allData)
     .then(function(response) {
       // console.log('response', response);
     })

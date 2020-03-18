@@ -1,7 +1,7 @@
 {
   "name": "fbmsg",
   "version": "1.0.0",
-  "description": "",
+  "description": "按鈕/buttons, 快選/quick reply, 牌卡/carousel template, tell user text only if sending other types of messages",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
