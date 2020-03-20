@@ -19,3 +19,6 @@ $ npm run dev
 
 You might have to use tools for example [ngrok](https://ngrok.com/) or deploy the server to sites for example [Heroku](https://www.heroku.com/) to see the result. 
 
+ [API reference](https://developers.facebook.com/docs/messenger-platform/send-messages) 
+
+
