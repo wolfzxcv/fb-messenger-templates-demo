@@ -25,13 +25,12 @@ function receiveMessage(req, res) {
   const event = req.body.entry[0].messaging[0];
   console.log(event);
   const userId = event.sender.id;
-  const userText = event.message.text;
+  const userText = event.message.text ? event.message.text : '';
   let replyWords;
   let replyData;
   if (
-    event.message &&
-    event.message.text &&
-    event.message.text.includes('按鈕')
+    // 按鈕 represents buttons
+    userText.includes('按鈕')
   ) {
     replyWords = 'Site links here';
     (replyData = {
@@ -62,9 +61,8 @@ function receiveMessage(req, res) {
     }),
       sendMessage(userId, replyData);
   } else if (
-    event.message &&
-    event.message.text &&
-    event.message.text.includes('快選')
+    // 快選 represents quick reply
+    userText.includes('快選')
   ) {
     replyData = {
       text: 'Yes or No',
@@ -87,9 +85,8 @@ function receiveMessage(req, res) {
     };
     sendMessage(userId, replyData);
   } else if (
-    event.message &&
-    event.message.text &&
-    event.message.text.includes('牌卡')
+    // 牌卡 represents carousel
+    userText.includes('牌卡')
   ) {
     (replyData = {
       attachment: {
@@ -168,13 +165,13 @@ function receiveMessage(req, res) {
       },
     }),
       sendMessage(userId, replyData);
-  } else if (event.message && event.message.text) {
+  } else if (userText) {
     replyWords = `You said ${userText}`;
     replyData = {
       text: replyWords,
     };
     sendMessage(userId, replyData);
-  } else if (event.message && !event.message.text) {
+  } else if (!userText) {
     replyWords = `Text only, please.`;
     replyData = {
       text: replyWords,
