@@ -11,9 +11,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": ">=0.21.1",
     "body-parser": "^1.19.0",
+    "dot-prop": "^6.0.1",
     "express": "^4.17.1",
+    "ini": "^2.0.0",
     "nodemon": "^2.0.2"
   }
 }
